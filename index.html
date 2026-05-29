@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bernedoodle — A Love Story</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5efe6;
+      --warm-white: #faf7f2;
+      --bark: #3b2a1a;
+      --rust: #a0522d;
+      --sage: #6b7c5e;
+      --sand: #c9a97a;
+      --shadow: rgba(59, 42, 26, 0.15);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bark);
+      font-family: 'Jost', sans-serif;
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── Hero wrapper ── */
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Video fills the entire hero */
+    .hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      animation: fadeInVideo 2s ease 0.5s forwards;
+    }
+
+    /* Soft gradient overlay so text is legible */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(59,42,26,0.35) 0%,
+        rgba(59,42,26,0.10) 40%,
+        rgba(59,42,26,0.55) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Overlay content ── */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: riseIn 1s cubic-bezier(0.22,1,0.36,1) 1.4s forwards;
+    }
+
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 1.0;
+      color: var(--warm-white);
+      margin-bottom: 0.3em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--sand);
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1rem, 2.2vw, 1.5rem);
+      color: rgba(245,239,230,0.75);
+      margin-bottom: 2.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── CTA Button ── */
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cream);
+      border: 1px solid rgba(245,239,230,0.55);
+      padding: 1em 2.6em;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s ease;
+      cursor: pointer;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--sand);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      z-index: -1;
+    }
+
+    .btn:hover {
+      color: var(--bark);
+      border-color: var(--sand);
+    }
+
+    .btn:hover::before {
+      transform: scaleX(1);
+    }
+
+    /* ── Bottom badge ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: riseIn 1s ease 2.4s forwards;
+    }
+
+    .scroll-hint span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.5);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(201,169,122,0.8), transparent);
+      animation: linePulse 2s ease-in-out infinite 2.5s;
+    }
+
+    /* ── Decorative corner ornaments ── */
+    .corner {
+      position: absolute;
+      z-index: 2;
+      width: 60px;
+      height: 60px;
+      opacity: 0.45;
+    }
+    .corner--tl { top: 2rem; left: 2rem; border-top: 1px solid var(--sand); border-left: 1px solid var(--sand); }
+    .corner--tr { top: 2rem; right: 2rem; border-top: 1px solid var(--sand); border-right: 1px solid var(--sand); }
+    .corner--bl { bottom: 2rem; left: 2rem; border-bottom: 1px solid var(--sand); border-left: 1px solid var(--sand); }
+    .corner--br { bottom: 2rem; right: 2rem; border-bottom: 1px solid var(--sand); border-right: 1px solid var(--sand); }
+
+    /* ── Animations ── */
+    @keyframes fadeInVideo {
+      to { opacity: 1; }
+    }
+    @keyframes riseIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes linePulse {
+      0%, 100% { opacity: 0.5; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--tr"></div>
+    <div class="corner corner--bl"></div>
+    <div class="corner corner--br"></div>
+
+    <video
+      src="generate_a_10_second_video_of_a_cute_Bernedoodle_sitting_on_a_porch_while_wind_gently_moves_its_fur__seed2657312286.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+
+    <div class="hero-content">
+      <p class="eyebrow">Meet the breed</p>
+      <h1>The <em>Bernedoodle</em></h1>
+      <p class="tagline">Gentle soul. Boundless heart. Forever yours.</p>
+      <a href="content.html" class="btn">Discover More</a>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+</body>
+</html>
